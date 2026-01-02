@@ -24,15 +24,6 @@ export const MapViewContainer: React.FC<MapViewContainerProps> = ({
 }) => {
   const mapRef = useRef<MapView>(null);
 
-  // Debug: Kaç tane yemek var?
-  console.log('🍔 MapViewContainer - Dishes count:', dishes.length);
-  console.log('📍 First dish location:', dishes[0]?.location);
-  
-  // Featured yemekleri kontrol et
-  const featuredCount = dishes.filter(d => d.isFeatured).length;
-  console.log('⭐ Featured dishes count:', featuredCount);
-  console.log('🎯 Featured dishes:', dishes.filter(d => d.isFeatured).map(d => d.name));
-
   // Pin'e tıklandığında kameraya yumuşak zoom
   const handleDishSelect = useCallback((dish: HeroDish) => {
     onDishSelect(dish);
@@ -73,7 +64,6 @@ export const MapViewContainer: React.FC<MapViewContainerProps> = ({
         {/* Yemek Pinleri */}
         {dishes.map((dish) => {
           const pinColor = dish.isFeatured ? '#F59E0B' : '#EF4444';
-          console.log(`📍 ${dish.name}: isFeatured=${dish.isFeatured}, pinColor=${pinColor}`);
           
           return (
             <Marker
