@@ -8,7 +8,6 @@ import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import mapStyle from '../constants/MapStyles.json';
 import { HeroDish, MapRegion } from '../types';
-import { CustomMarker } from './CustomMarker';
 
 interface MapViewContainerProps {
   dishes: HeroDish[];
@@ -66,21 +65,19 @@ export const MapViewContainer: React.FC<MapViewContainerProps> = ({
         rotateEnabled={false}
         pitchEnabled={false}
       >
-        {/* Render custom markers */}
-        {dishes.map((dish) => (
-          <Marker
-            key={dish.id}
-            coordinate={dish.location}
-            tracksViewChanges={false}
-            anchor={{ x: 0.5, y: 0.5 }}
-          >
-            <CustomMarker
-              dish={dish}
-              onPress={handleDishSelect}
-              isSelected={selectedDish?.id === dish.id}
+        {/* Yemek Pinleri */}
+        {dishes.map((dish) => {
+          return (
+            <Marker
+              key={dish.id}
+              coordinate={dish.location}
+              title={dish.name}
+              description={dish.description}
+              onPress={() => handleDishSelect(dish)}
+              pinColor={dish.isFeatured ? '#F59E0B' : '#EF4444'}
             />
-          </Marker>
-        ))}
+          );
+        })}
       </MapView>
     </View>
   );

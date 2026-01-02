@@ -67,17 +67,14 @@ export const CustomMarker: React.FC<CustomMarkerProps> = ({
   const handlePress = () => {
     // Haptic feedback
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    
-    // Kısa scale animasyonu
-    scale.value = withSpring(0.9, { damping: 10 }, () => {
-      scale.value = withSpring(isSelected ? 1.3 : 1);
-    });
-    
     onPress(dish);
   };
 
+  // Debug
+  console.log('🎨 CustomMarker rendering:', dish.name);
+
   return (
-    <Pressable onPress={handlePress}>
+    <Pressable onPress={handlePress} style={styles.pressable}>
       <Animated.View style={[styles.container, animatedContainerStyle]}>
         {/* Glow Efekti (Featured için) */}
         {dish.isFeatured && (
@@ -115,13 +112,19 @@ export const CustomMarker: React.FC<CustomMarkerProps> = ({
   );
 };
 
-const MARKER_SIZE = 50;
-const GLOW_SIZE = 70;
+const MARKER_SIZE = 60;
+const GLOW_SIZE = 80;
 
 const styles = StyleSheet.create({
+  pressable: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    width: MARKER_SIZE + 20,
+    height: MARKER_SIZE + 20,
   },
   glow: {
     position: 'absolute',
