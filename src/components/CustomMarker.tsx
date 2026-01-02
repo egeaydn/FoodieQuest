@@ -8,7 +8,7 @@
 
 import * as Haptics from 'expo-haptics';
 import React, { useEffect } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Animated, {
     Easing,
     useAnimatedStyle,
@@ -70,45 +70,40 @@ export const CustomMarker: React.FC<CustomMarkerProps> = ({
     onPress(dish);
   };
 
-  // Debug
-  console.log('🎨 CustomMarker rendering:', dish.name);
-
   return (
-    <Pressable onPress={handlePress} style={styles.pressable}>
-      <Animated.View style={[styles.container, animatedContainerStyle]}>
-        {/* Glow Efekti (Featured için) */}
-        {dish.isFeatured && (
-          <Animated.View style={[styles.glow, animatedGlowStyle]} />
-        )}
+    <Animated.View style={[styles.container, animatedContainerStyle]}>
+      {/* Glow Efekti (Featured için) */}
+      {dish.isFeatured && (
+        <Animated.View style={[styles.glow, animatedGlowStyle]} />
+      )}
 
-        {/* Pin Çerçevesi */}
-        <View
-          style={[
-            styles.markerBorder,
-            {
-              borderColor: dish.isFeatured
-                ? Colors.marker.featuredBorder
-                : Colors.marker.normalBorder,
-              borderWidth: dish.isFeatured ? 3 : 2,
-            },
-          ]}
-        >
-          {/* Yemek Fotoğrafı */}
-          <Image
-            source={{ uri: dish.imageUrl }}
-            style={styles.markerImage}
-            resizeMode="cover"
-          />
+      {/* Pin Çerçevesi */}
+      <View
+        style={[
+          styles.markerBorder,
+          {
+            borderColor: dish.isFeatured
+              ? Colors.marker.featuredBorder
+              : Colors.marker.normalBorder,
+            borderWidth: dish.isFeatured ? 3 : 2,
+          },
+        ]}
+      >
+        {/* Yemek Fotoğrafı */}
+        <Image
+          source={{ uri: dish.imageUrl }}
+          style={styles.markerImage}
+          resizeMode="cover"
+        />
+      </View>
+
+      {/* Featured Badge (Opsiyonel) */}
+      {dish.isFeatured && (
+        <View style={styles.featuredBadge}>
+          <View style={styles.starIcon} />
         </View>
-
-        {/* Featured Badge (Opsiyonel) */}
-        {dish.isFeatured && (
-          <View style={styles.featuredBadge}>
-            <View style={styles.starIcon} />
-          </View>
-        )}
-      </Animated.View>
-    </Pressable>
+      )}
+    </Animated.View>
   );
 };
 
@@ -116,10 +111,6 @@ const MARKER_SIZE = 60;
 const GLOW_SIZE = 80;
 
 const styles = StyleSheet.create({
-  pressable: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   container: {
     alignItems: 'center',
     justifyContent: 'center',

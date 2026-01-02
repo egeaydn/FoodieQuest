@@ -7,7 +7,7 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import * as Haptics from 'expo-haptics';
 import { Clock, MapPin, Navigation, Phone, Star } from 'lucide-react-native';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
     Image,
     Linking,
@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { HeroDish } from '../types';
+import { CheckInButton } from './CheckInButton';
 
 interface DishDetailsSheetProps {
   dish: HeroDish | null;
@@ -29,9 +30,16 @@ export const DishDetailsSheet: React.FC<DishDetailsSheetProps> = ({
   onClose,
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [hasCheckedIn, setHasCheckedIn] = useState(false);
 
   // Snap noktaları: kapalı, özet (40%), tam detay (90%)
   const snapPoints = useMemo(() => ['40%', '90%'], []);
+
+  const handleCheckInSuccess = useCallback((dish: HeroDish) => {
+    setHasCheckedIn(true);
+    console.log('✅ Check-in başarılı:', dish.name);
+    // TODO: Burada puan sistemini entegre edebiliriz
+  }, []);
 
   const handleNavigate = useCallback(() => {
     if (!dish) return;
@@ -151,6 +159,18 @@ export const DishDetailsSheet: React.FC<DishDetailsSheetProps> = ({
                   Bugün: {dish.restaurant.openingHours.monday}
                 </Text>
               </View>
+            </View>
+          )}
+
+          {/* Check-in Button */}
+          {!hasCheckedIn && (
+            <CheckInButton dish={dish} onCheckInSuccess={handleCheckInSuccess} />
+          )}
+
+          {hasCheckedIn && (
+            <View style={styles.checkedInBadge}>
+              <Star size={20} color={Colors.semantic.success} fill={Colors.semantic.success} />
+              <Text style={styles.checkedInText}>Hazine Bulundu! 🎉</Text>
             </View>
           )}
 
@@ -317,6 +337,24 @@ const styles = StyleSheet.create({
   },
   navigateText: {
     color: Colors.background.primary,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  checkedInBadge: {
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginBottom: 16,
+    gap: 8,
+    borderWidth: 2,
+    borderColor: Colors.semantic.success,
+  },
+  checkedInText: {
+    color: Colors.semantic.success,
     fontSize: 16,
     fontWeight: '700',
   },
